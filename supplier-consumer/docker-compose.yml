@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+  consumer-server:
+    build: ./consumer-service
+    image: consumer_service_image
+    container_name: consumer-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SUPPLIER_SERVER_URL=http://supplier-service:8080/api/v1
+
+  supplier-service:
+    build: ./supplier-service
+    image: supplier_service_image
+    container_name: supplier_service
+    depends_on:
+      - supplier-database
+    ports:
+      - "8080:8080"
+    environment:
+      - SS_DRIVER=org.postgresql.Driver
+      - SS_DATASOURCE_URL=jdbc:postgresql://openschool_db:5432/supplier
+      - SS_DB_USER=admin
+      - SS_DB_PASSWORD=pswadmin
+
+  supplier-database:
+    image: postgres:14-alpine
+    container_name: openschool_db
+    volumes:
+      - supplier-data:/var/lib/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=supplier
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pswadmin
+
+volumes:
+  supplier-data:

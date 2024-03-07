@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${SS_DATASOURCE_URL:jdbc:postgresql://localhost:5432/openschool}
+    username: ${SS_DB_USER:postgres}
+    password: ${SS_DB_PASSWORD:rootroot}
+    driver-class-name: ${SS_DRIVER:org.postgresql.Driver}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
